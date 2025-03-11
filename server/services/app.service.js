@@ -49,7 +49,7 @@ class AppService {
    * @param {string} userId identifiant de l'item 
    */
   async getUserById(userId) {
-    const query = { userId: userId };
+    const query = { id: userId };
     return this.userCollection.findOne(query);
   }
 
@@ -70,6 +70,13 @@ class AppService {
     const query = { mail: mail };
     return this.userCollection.findOne(query);
   }
+
+  async updateUser(user) {
+    const query = { id: user.id };
+    const update = { $set: user };
+    return this.userCollection.updateOne(query, update);
+  }
+
 
   /**
    * Réinitialiser la base de données en supprimant toutes les collections et en les remplissant à nouveau

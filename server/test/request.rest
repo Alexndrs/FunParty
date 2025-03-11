@@ -1,6 +1,6 @@
 ### Récupérer tous les utilisateurs (GET /user) avec le token récup lors de la connexion
 GET http://localhost:5020/user
-Authorization: Bearer thatIsASecretHEHE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFmOGMyMjczLThkNGUtNDAwMi1hNTNkLTg0ODUyNTQ2ZDdkYyIsIm5hbWUiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0MTY2NzA3NSwiZXhwIjoxNzQxNjc3ODc1fQ.kVJ28LuLKPKeW_o-lGR7j8_wfBQ0Hm1odDuKZf-CFTU
 Content-Type: application/json
 
 ### Inscription d'un utilisateur normal (POST /user)
@@ -32,7 +32,20 @@ Content-Type: application/json
     "password": "admin123"
 }
 
+
+### Ajouter un ami (POST /user/addFriend)
+POST http://localhost:5020/user/addFriend
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiNDIzOTg1LTk1NmMtNDNjMC1hNWVlLWQwNzc5MGZhZDJmMSIsIm5hbWUiOiJ1c2VyMSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQxNjY3Mzk0LCJleHAiOjE3NDE2NzgxOTR9.OHarPjHPwUgRVnAWp1V95rfaRC-4HnVgPrS5IYHRjXg
+Content-Type: application/json
+
+{
+    "userId1": "0a97d600-b122-4e7d-a5f1-45c4c1ebe212",
+    "userId2": "ab423985-956c-43c0-a5ee-d07790fad2f1"
+}
+
+
+
 ### Reset la collection user (DELETE /user)
 DELETE http://localhost:5020/user
-Authorization: Bearer thatIsASecretHEHE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFmOGMyMjczLThkNGUtNDAwMi1hNTNkLTg0ODUyNTQ2ZDdkYyIsIm5hbWUiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0MTY2NzMzMiwiZXhwIjoxNzQxNjc4MTMyfQ.YWAJsyNTxxV7iiEemOuIwpHBwQscTbJD4LM5X5kXAB4
 Content-Type: application/json

@@ -12,7 +12,7 @@ const { appService } = require('../services/app.service');
  * @property {string} mail
  * @property {string} password (hashed)
  * @property {string} role (admin or user)
- *  
+ * @property {string[]} friendList - (list of user id)
  * 
  */
 
@@ -30,7 +30,7 @@ class UserManager {
             const hashedAdminPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
             let role = "admin";
             const id = uuidv4();
-            const newAdmin = { id, name: "admin", mail: process.env.ADMIN_MAIL, password: hashedAdminPassword, role };
+            const newAdmin = { id, name: "admin", mail: process.env.ADMIN_MAIL, password: hashedAdminPassword, role, friendList: [] };
             await appService.addUser(newAdmin);
         } catch (err) {
 
@@ -49,7 +49,7 @@ class UserManager {
 
             let role = "user"; // rôle par défaut
             const id = uuidv4();
-            const newUser = { id, name, mail, password: hashedPassword, role };
+            const newUser = { id, name, mail, password: hashedPassword, role, friendList: [] };
             await appService.addUser(newUser); // Ajout à la db
 
             const accessToken = jwt.sign(
@@ -61,6 +61,30 @@ class UserManager {
             return { accessToken, status: { number: 201 } };
         } catch (err) {
             return { accessToken: undefined, status: { number: 500 } };
+        }
+    }
+
+    async addFriend(userId1, userId2) {
+        try {
+
+            console.log(userId1)
+            console.log(userId2)
+
+            const user1 = await appService.getUserById(userId1);
+            const user2 = await appService.getUserById(userId2);
+            if (!user1 || !user2) {
+                return { status: { number: 404 } };
+            }
+            if (user1.friendList.includes(userId2) || user2.friendList.includes(userId1)) {
+                return { status: { number: 409 } };
+            }
+            user1.friendList.push(userId2);
+            user2.friendList.push(userId1);
+            await appService.updateUser(user1);
+            await appService.updateUser(user2);
+            return { status: { number: 200 } };
+        } catch (err) {
+            return { status: { number: 500 } };
         }
     }
 

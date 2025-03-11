@@ -67,6 +67,21 @@ class UserRouter {
         });
 
 
+        this.router.post('/addFriend', this.authenticateToken, async (req, res) => {
+            const { userId1, userId2 } = req.body;
+            const { status } = await this.userManager.addFriend(userId1, userId2);
+
+            if (status.number === 404)
+                res.status(404).send("User not found");
+            else if (status.number === 409)
+                res.status(409).send("Users are already friends");
+            else if (status.number === 500)
+                res.status(500).send("Internal server error");
+            else
+                res.status(200).send("Friend added successfully");
+        });
+
+
         this.router.delete('/', this.authenticateToken, this.authorizeRole("admin"), () => {
             // Clear DB : 
             this.userManager.clearDB();
