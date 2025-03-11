@@ -1,0 +1,38 @@
+### Récupérer tous les utilisateurs (GET /user) avec le token récup lors de la connexion
+GET http://localhost:5020/user
+Authorization: Bearer thatIsASecretHEHE
+Content-Type: application/json
+
+### Inscription d'un utilisateur normal (POST /user)
+POST http://localhost:5020/user
+Content-Type: application/json
+
+{
+    "name": "user1",
+    "mail": "user1@gmail.com",
+    "password": "password123"
+}
+
+
+### Connexion d'un utilisateur normal (POST /user/login)
+POST http://localhost:5020/user/login
+Content-Type: application/json
+
+{   
+    "mail": "user1@gmail.com",
+    "password": "password123"
+}
+
+### Connexion d'un admin (POST /user/login)
+POST http://localhost:5020/user/login
+Content-Type: application/json
+
+{   
+    "mail": "alexandred56700@gmail.com",
+    "password": "admin123"
+}
+
+### Reset la collection user (DELETE /user)
+DELETE http://localhost:5020/user
+Authorization: Bearer thatIsASecretHEHE
+Content-Type: application/json

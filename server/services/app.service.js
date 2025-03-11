@@ -1,13 +1,13 @@
 require('dotenv').config();
 const { dbService } = require("./database.service");
-const { v4: uuidv4 } = require("uuid");
 
 /**
  * @typedef {Object} User
- * @property {string} username - Nom de l'user.
- * @property {string} userId - Id de l'user.
- * @property {string} userMail - mail de l'user.
- * @property {string} password -
+ * @property {string} id 
+ * @property {string} name
+ * @property {string} mail
+ * @property {string} password (hashed)
+ * @property {string} role (admin or user)
  * @property {string[]} friendList - 
 
  * @typedef {Object} Room
@@ -39,10 +39,7 @@ class AppService {
   }
 
 
-  /**
-   * Récupérer tous les user de la base de données
-   * @returns {Promise<Object[]>} - Tous les user
-   */
+  // Récupérer tous les users de la base de données
   async getAllUsers() {
     return this.userCollection.find({}).toArray();
   }
@@ -53,6 +50,24 @@ class AppService {
    */
   async getUserById(userId) {
     const query = { userId: userId };
+    return this.userCollection.findOne(query);
+  }
+
+  /**
+  * Ajouter un user à la base de données
+  * @param {Object} user identifiant de l'item 
+  */
+
+  async addUser(user) {
+    // ajouter un user si il n'existe pas déjà
+    if (await this.findUserByMail(user.mail)) {
+      throw new Error("User already exists");
+    }
+    return this.userCollection.insertOne(user);
+  }
+
+  async findUserByMail(mail) {
+    const query = { mail: mail };
     return this.userCollection.findOne(query);
   }
 
