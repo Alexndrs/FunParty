@@ -9,10 +9,11 @@ const { dbService } = require("./database.service");
  * @property {string} password (hashed)
  * @property {string} role (admin or user)
  * @property {string[]} friendList - 
+ * @property {string[]} roomList - 
 
  * @typedef {Object} Room
- * @property {string} roomName
- * @property {string} roomId.
+ * @property {string} name
+ * @property {string} id.
  * @property {string[]} usersId - Id des users dans la room.
  * @property {Challenge[]} challenges - Liste des challenges de la room.
  * 
@@ -77,9 +78,36 @@ class AppService {
     return this.userCollection.updateOne(query, update);
   }
 
+  async getAllRooms() {
+    return this.roomCollection.find({}).toArray();
+  }
+
+  async getRoomById(roomId) {
+    const query = { roomId: roomId };
+    return this.roomCollection.findOne(query);
+  }
+
+  async addRoom(room) {
+    return this.roomCollection.insertOne(room);
+  }
+
+  async updateRoom(room) {
+    const query = { id: room.id };
+    const update = { $set: room };
+    return this.roomCollection.updateOne(query, update);
+  }
+
+
+  async resetUserCollection() {
+    await this.userCollection.deleteMany({});
+  }
+
+  async resetRoomCollection() {
+    await this.roomCollection.deleteMany({});
+  }
 
   /**
-   * Réinitialiser la base de données en supprimant toutes les collections et en les remplissant à nouveau
+   * Réinitialiser la base de données en supprimant toutes les collections
    */
   async resetDatabase() {
     await this.userCollection.deleteMany({});

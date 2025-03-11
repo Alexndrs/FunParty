@@ -13,6 +13,7 @@ const { appService } = require('../services/app.service');
  * @property {string} password (hashed)
  * @property {string} role (admin or user)
  * @property {string[]} friendList - (list of user id)
+ * @property {string[]} roomList - (list of room id)
  * 
  */
 
@@ -30,7 +31,7 @@ class UserManager {
             const hashedAdminPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
             let role = "admin";
             const id = uuidv4();
-            const newAdmin = { id, name: "admin", mail: process.env.ADMIN_MAIL, password: hashedAdminPassword, role, friendList: [] };
+            const newAdmin = { id, name: "admin", mail: process.env.ADMIN_MAIL, password: hashedAdminPassword, role, friendList: [], roomList: [] };
             await appService.addUser(newAdmin);
         } catch (err) {
 
@@ -49,7 +50,7 @@ class UserManager {
 
             let role = "user"; // rôle par défaut
             const id = uuidv4();
-            const newUser = { id, name, mail, password: hashedPassword, role, friendList: [] };
+            const newUser = { id, name, mail, password: hashedPassword, role, friendList: [], roomList: [] };
             await appService.addUser(newUser); // Ajout à la db
 
             const accessToken = jwt.sign(
@@ -114,7 +115,7 @@ class UserManager {
 
     async clearDB() {
         try {
-            await appService.resetDatabase();
+            await appService.resetUserCollection();
             await this.createAdmin();
         } catch (err) {
             console.error(err);
